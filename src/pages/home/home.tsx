@@ -19,7 +19,7 @@ function Home() {
                 “Cozinhar não é um serviço, é uma forma de amar. Seja bem-vindo ao meu
                 atelier, onde a tradição francesa encontra a doçura do coração.”
               </p>
-              <a className="linha4" href="https://api.whatsapp.com/"
+              <a className="linha4" href="https://wa.me/551140028922?text=Ol%C3%A1%20gostaria%20de%20encomendar%20um%20bolo!"
               target='blank'>
                 encomendar agora
               </a>
@@ -48,19 +48,19 @@ function Home() {
             <hr />
           </div>
           <div className="container_categorias">
-            <Link to="/produtos">
+            <Link to="/produtos?categoria=1">
               <div className="img_categoria1">
                 <span>Momentos Inesquecíveis</span>
                 <h3>Bolos de Festa</h3>
               </div>
             </Link>
             <div className="col_categorias">
-              <Link to="/produtos">
+              <Link to="/produtos?categoria=2">
                 <div className="img_categoria2">
                   <h3>Tortas Francesas</h3>
                 </div>
               </Link>
-              <Link to="/produtos">
+              <Link to="/produtos?categoria=3">
                 <div className="img_categoria3">
                   <h3>Bolos Caseiros</h3>
                 </div>
