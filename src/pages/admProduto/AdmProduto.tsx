@@ -1,12 +1,47 @@
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Dialog from '../../components/dialogo/Dialog';
 import './AdmProduto.css'
-import { Button } from 'react-bootstrap';
+import type { ProdutoRequest, Produto } from '../../types/Produto';
+import type { Categoria } from '../../types/categoria';
+import produtoService from '../../services/produtosService';
+import categoriaService from '../../services/categoriaService';
 
+const formularioVazio: ProdutoRequest = {
+    nome: '',
+    descricaoCurta: '',
+    descricaoLonga: '',
+    ativo: true,
+    precoPorKg: 0,
+    imagem: '',
+    categoriaIds: []
+}
 function AdmProduto() {
 
+    const [produtos, setProdutos] = useState<Produto[]>([]);
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
+    const [formulario, setFormulario] = useState<ProdutoRequest>(formularioVazio)
+    const [arquivo, setArquivo] = useState<File | null>(null);
+    const [editandoid, setEditandoid] = useState<Number | null>(null)
+    const [excluindo, setExcluindo] = useState<Produto | null>();
+    const [erro, setErro] = useState('')
+    const [mensagem, setMensagem] = useState(false)
+    const [salvando, setSalvando] = useState(false)
     const [mostrar, setMostrar] = useState(false)
+    useEffect(() => {
+        if (!sessionStorage.getItem('token')) return;
+        Promise.all([produtoService.listar(), categoriaService.listar()])
+        .then(([Lista, categoriasAPI]) =>{
+            setProdutos (Lista)
+            setCategorias(categoriasAPI)
+        })
 
+        .catch(() => setErro("não foi possivel carregar os dados."))
+    })
+
+
+
+
+    
     const aoFechar = () => setMostrar(false)
 
     const aoConfirmar = () => {
@@ -136,7 +171,7 @@ function AdmProduto() {
                                     joconde.
                                 </td>
                                 <td data-cell="opções">
-                                    <button type='button' onClick={() => setMostrar(true)}>     
+                                    <button type='button' onClick={() => setMostrar(true)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
                                             {/*! Font Awesome Pro 7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2026 Fonticons, Inc. */}
                                             <path

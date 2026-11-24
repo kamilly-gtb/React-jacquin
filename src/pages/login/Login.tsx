@@ -1,15 +1,35 @@
 import './Login.css';
 import iconeimg from '../../assets/img/icon_jacquin.png'
 import { useNavigate } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
+import authService from '../../services/authServices';
 
 
 function Login() {
+    const [email, setEmeill] = useState('')
+    const [senha, setSenha] = useState('')
+    const [erro, setErro] = useState('')
+    const [enviando, setEnviando] = useState(false)
+    const navigate = useNavigate();
 
-const navigate = useNavigate();
+    const logar = async (evento: FormEvent<HTMLFormElement>) => {
+        evento.preventDefault();
+            setEnviando(true);
+            setErro('');
+            try{
+                await authService.logar(email, senha);
+                navigate('/AdmProdutos')
+                
 
-const logar = () => {
-    navigate('/AdmProdutos')
-}
+            } catch{
+                setErro('Não foi possivel entrar. Email ou senha incorretos');
+
+            }finally{
+                setEnviando(false);
+            }
+
+        
+    }
 
     return (
         <main>
@@ -25,16 +45,32 @@ const logar = () => {
                         <span>Se Connecter</span>
                         <hr />
                     </div>
-                    <form action="" method="post">
+                    <form onSubmit={logar}>
                         <div className="form_linha">
                             <label htmlFor="email">e-mail</label>
-                            <input type="text" id="email" placeholder="Ex: email@email.com" />
+                            <input
+                                type="text"
+                                id="email"
+                                placeholder="Ex: email@email.com"
+                                value={email}
+                                onChange={evento => setEmeill(evento.target.value)}
+                                required
+                            />
                         </div>
                         <div className="form_linha">
                             <label htmlFor="senha">senha</label>
-                            <input type="password" id="senha" placeholder="Ex: Senha@123" />
+                            <input
+                                type="password"
+                                id="senha"
+                                placeholder="Ex: Senha@123"
+                                value={senha}
+                                onChange={evento => setSenha(evento.target.value)}
+                                required
+                            />
                         </div>
-                        <input type="button" defaultValue="conectar" onClick={logar} />
+                        {erro && <p role='alert'>{erro}</p>}
+                        <button type='submit' disabled={enviando}>{enviando ?
+                        'conectando...': "conectar"}</button>
                     </form>
                 </div>
             </section>
